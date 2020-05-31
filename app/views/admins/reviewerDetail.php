@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <h1 class="mt-4">Paper details</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo URLROOT; ?>admins/home">Dashboard</a></li>
             <li class="breadcrumb-item active">Paper details</li>
         </ol>
         <div class="card mb-4">

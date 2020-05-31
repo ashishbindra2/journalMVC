@@ -3,10 +3,9 @@
     <div class="container-fluid">
         <h1 class="mt-4">Active Journals</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo URLROOT; ?>admins/home">Dashboard</a></li>
             <li class="breadcrumb-item active">View Journals</li>
         </ol>
-
         <div class="card mb-4">
             <div class="card-body">
                 <label for="2" class="text-right"> Search :</label>
@@ -15,6 +14,8 @@
         </div>
         <div class="card mb-4">
             <div class="card-header"><i class="fas fa-table mr-1"></i> List of Journals</div>
+            <?php flash('delete_success'); ?>
+
             <div class="card-body">
                 <div class="table-responsive">
                     <table width="100%" class="table table-striped table-bordered table-hover" id="userTbl">
@@ -36,22 +37,22 @@
                                 foreach ($data['journal'] as $journal) :   ?>
                                     <tr>
                                         <td> <?php echo $journal->jName; ?> </td>
-
                                         <td> <?php echo $journal->sName; ?> </td>
                                         <td> <?php echo $journal->jAbb; ?> </td>
                                         <td> <?php echo $journal->jP; ?> </td>
                                         <td> <?php echo $journal->jO; ?> </td>
                                         <td> <?php echo $journal->jF; ?> </td>
-
-                                        <td><a href="update_journal.php?ID=<?php echo $c["JOURNAL_ID"]; ?>">Edit</a></td>
-                                        <td><a href="delete_data.php?ID=<?php echo $c["JOURNAL_ID"]; ?>&func=<?php echo 1; ?>">
-                                                <span class="glyphicon glyphicon-trash">
-                                                </span></a>
-                                        </td>
+                                        <td><a href="<?php echo URLROOT; ?>admins/updateJournal&ID=<?php echo $journal->jid; ?>">Edit</a></td>
+                                        <form method="post">
+                                            <input type="hidden" name="bid" id='bid' value="<?php echo $journal->jid; ?>">
+                                            <td><button type="submit" value="delete" id="delete" class="btn btn-danger"> Delete </button> <span class="glyphicon glyphicon-trash">
+                                                </span>
+                                            </td>
+                                        </form>
                                     </tr>
                             <?php endforeach;
                             } else
-                                echo "No REsult Found";
+                                echo "No Result Found";
                             ?>
 
                         </tbody>

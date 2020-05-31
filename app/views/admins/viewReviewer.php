@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <h1 class="mt-4">Active Reviewer</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo URLROOT; ?>admins/home">Dashboard</a></li>
             <li class="breadcrumb-item active">View Reviewer</li>
         </ol>
 
@@ -34,21 +34,22 @@
                             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
                             <?php
                             if (isset($data['view'])) {
-                                foreach ($data['view'] as $reviwers) {
-                            ?>
+                                foreach ($data['view'] as $reviwers) { ?>
                                     <tr>
-
-                                        <td><?php echo $reviwers->FNAME; ?> </td>
+                                        <td> <?php echo $reviwers->FNAME; ?> </td>
                                         <td> <?php echo $reviwers->TITLE; ?> </td>
                                         <td> <?php echo $reviwers->DESIGNATION; ?> </td>
                                         <td> <?php echo $reviwers->INST_NAME; ?> </td>
                                         <td> <?php echo $reviwers->EMAIL; ?> </td>
-
                                         <td> <?php echo $reviwers->WEBPAGE; ?> </td>
-                                        <td><a href="update_editor.php?ID=<?php echo $c["EIC_ID"]; ?>">Edit</a></td>
-                                        <td><a href="delete_data.php?ID=<?php echo $c["EIC_ID"]; ?>&func=<?php echo 3; ?>">
-                                                <span class="glyphicon glyphicon-trash"></span></a>
-                                        </td>
+                                        <form method="post">
+                                            <td><a href="<?php echo URLROOT; ?>admins/updateReviewere&ID=<?php echo $reviwers->REVIEWER_ID ?>" style=" text-decoration:none;">Edit</a>
+                                                <input type="hidden" name="eid" id="eid" value="<?php echo $ass->eid; ?>">
+                                                <input type="hidden" name="bid" id='bid' value="<?php echo $reviwers->REVIEWER_ID; ?>">
+                                                <button type="submit" value="delete" id="delete" style="border: none; text-decoration:none;background:transparent; color:red;"> Delete </button> <span class="glyphicon glyphicon-trash">
+                                                </span>
+                                            </td>
+                                        </form>
                                     </tr>
                             <?php    }
                             } else

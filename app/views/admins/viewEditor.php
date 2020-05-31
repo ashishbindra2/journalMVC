@@ -3,11 +3,11 @@
     <div class="container-fluid">
         <h1 class="mt-4">Active Editors</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo URLROOT; ?>admins/home">Dashboard</a></li>
             <li class="breadcrumb-item active">View Editors</li>
         </ol>
 
-        <div class="card mb-4">
+        <div class="card mb-4"><?php flash('delete_success'); ?>
             <div class="card-body">
                 <label for="2" class="text-right"> Search :</label>
                 <input type="text" id="2" class="search form-control col-sm-6" placeholder="What you looking for?">
@@ -15,6 +15,7 @@
         </div>
         <div class="card mb-4">
             <div class="card-header"><i class="fas fa-table mr-1"></i>List Of Editors</div>
+
             <div class="card-body">
                 <div class="table-responsive">
                     <table width="100%" class="table table-striped table-bordered table-hover" id="userTbl">
@@ -27,7 +28,7 @@
                                 <th>Mobile No.</th>
                                 <th>Profile Weblink</th>
                                 <th>College</th>
-                                <th>opration</th>
+                                <th colspan="2">opration</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,11 +43,14 @@
                                         <td> <?php echo $ass->editorMobile; ?> </td>
                                         <td> <?php echo $ass->editorWeb; ?> </td>
                                         <td> <?php echo $ass->editorCollege; ?> </td>
-                                        <td>
-                                            <a href="update_editor.php?ID=<?php echo $c["EIC_ID"]; ?>">Edit</a>
-                                            <a href="delete_data.php?ID=<?php echo $c["EIC_ID"]; ?>&func=<?php echo 3; ?>">
-                                                <span class="glyphicon glyphicon-trash"></span></a>
-                                        </td>
+                                        <td><a href="<?php echo URLROOT; ?>admins/updateEditor&ID=<?php echo $ass->eid; ?>">Edit</a></td>
+                                        <input type="hidden" name="eid" id="eid" value="<?php echo $ass->eid; ?>">
+                                        <form method="post">
+                                            <input type="hidden" name="bid" id='bid' value="<?php echo $ass->eid; ?>">
+                                            <td><button type="submit" value="delete" id="delete" class="btn btn-danger"> Delete </button> <span class="glyphicon glyphicon-trash">
+                                                </span>
+                                            </td>
+                                        </form>
                                     </tr>
                             <?php endforeach;
                             } else

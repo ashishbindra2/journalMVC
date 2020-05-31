@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <h1 class="mt-4">Active Issue</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo URLROOT; ?>admins/home">Dashboard</a></li>
             <li class="breadcrumb-item active">View Issue</li>
         </ol>
 
@@ -15,6 +15,8 @@
         </div>
         <div class="card mb-4">
             <div class="card-header"><i class="fas fa-table mr-1"></i> List of Issue</div>
+            <?php flash('post_message'); ?>
+
             <div class="card-body">
                 <div class="table-responsive">
                     <table width="100%" class="table table-striped table-bordered table-hover" id="userTbl">
@@ -55,10 +57,11 @@
                                         <td> <?php echo $is->D_O_UPLOADING; ?> </td>
 
                                         <td> <?php echo $is->SPECIAL_ISSUE_NAME; ?> </td>
-                                        <td><a href="update_issue.php?ID=<?php echo $c["J_ISSUES_ID"]; ?>"><span class="glyphicon glyphicon-edit"></span></a></td>
-                                        <td><a href="delete_data.php?ID=<?php echo $c["J_ISSUES_ID"]; ?>&func=<?php echo 2; ?>">
-                                                <span class="glyphicon glyphicon-trash"></span></a>
-                                        </td>
+                                        <td><a href="<?php echo URLROOT; ?>admins/editIssue&ID=<?php echo $is->J_ISSUES_ID; ?>"><span class="glyphicon glyphicon-edit"></span>Edit</a></td>
+                                        <form method="post">
+                                            <input type="hidden" name="as" id="as" value="<?php echo $is->J_ISSUES_ID; ?>">
+                                            <td><button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span>>Delete</button> </td>
+                                        </form>
                                     </tr>
                             <?php $i++;
                                 }

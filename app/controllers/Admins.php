@@ -7,7 +7,199 @@ class Admins extends Controller
         $this->editorModel = $this->model('Editor');
         $this->loginModel = $this->model('Login');
     }
+    public function updateJournal()
+    {
+        $id = $_GET['ID'];
+        $stream = $this->loginModel->stream();
+        $journal = $this->editorModel->getJournalByStream();
+        $journalName = $this->editorModel->getJournalById($id);
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Sanitize POST array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'stream' => $stream,
+                'journal' => $journal,
+                'journa' => $journalName,
+                'id' => $id,
+                'name' => rim($_POST['journal_name']),
+                'jAbb' => rim($_POST['journal_n_abb']),
+                'status' => rim($_POST['status']),
+                'sid' => rim($_POST["Stream_id"]),
+                'jP' => rim($_POST['j_issn_p']),
+                'jE' => rim($_POST['j_issn_e']),
+                'frequency' => rim($_POST['frequency']),
 
+                'name_err' => '',
+                'jAbb_err' => '',
+                'status_err' => '',
+                'sid_err' => '',
+                'jP_err' => '',
+                'jE_err' => '',
+                'frequency_err' => ''
+
+            ];
+
+            if (empty($data['name'])) {
+                $data['name_err'] = "journal name is required";
+            }
+            if (empty($data['jAbb'])) {
+                $data['jAbb_err'] = "Abbervation is required";
+            }
+            if (empty($data['status'])) {
+                if ($data['status'] != '0')
+                    $data['status_err'] = "status is required";
+            }
+            if (empty($data['jP'])) {
+                $data['jP_err'] = "print is required";
+            }
+            if (empty($data['jE'])) {
+                $data['jE_err'] = "online is required";
+            }
+            if (empty($data['frequency'])) {
+                $data['frequency_err'] = "frequency is required";
+            }
+            if (empty($data['sid'])) {
+                $data['sid_err'] = "stream is required";
+            }
+            if (
+                empty($data['name_err']) && empty($data['jAbb_err']) &&
+                empty($data['status_err']) && empty($data['sid_err']) &&
+                empty($_POST['jP_err']) && empty($_POST['jE_err']) &&
+                empty($_POST['frequency_err'])
+            ) {
+                if ($this->editorModel->updateJournal($data)) {
+                    flash('register_success', 'You are registered and can log in');
+                    redirect('admins/viewJournal');
+                } else {
+                    die('Something went wrong');
+                }
+            } else
+                $this->view('admins/updateJournal', $data);
+        } else {
+            $data = [
+                'stream' => $stream,
+                'journal' => $journal,
+                'journa' => $journalName,
+                'name' =>  '',
+                'jAbb' => '',
+                'status' => '',
+                'sid' => '',
+                'frequency' => '',
+                'name_err' => '',
+                'jAbb_err' => '',
+                'status_err' => '',
+                'sid_err' => '',
+                'jP_err' => '',
+                'jE_err' => '',
+                'frequency' => ''
+            ];
+            $this->view('admins/updateJournal', $data);
+        }
+    }
+    public function updateEditor()
+    {
+        $id = $_GET['ID'];
+        $assocaie = $this->adminModel->editEditor($id);
+        $journalsId = $this->loginModel->getJournals();
+        $allStream = $this->loginModel->stream();
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Sanitize POST array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'journalId' => $journalsId,
+                'title' => 'test Us',
+                'stream' => $allStream,
+                'name' => rim($_POST['name']),
+                'email' => rim($_POST['email']),
+                'mobile' => rim($_POST['mobile']),
+                'web' => rim($_POST['weblink']),
+                'status' => rim($_POST['status']),
+                'college' => rim($_POST['college_name']),
+                'detail' => rim($_POST['Detail']),
+                'id' => $id,
+                'sid' => trim($_POST['sid']),
+                'stream_err' => '',
+                'name_err' => '',
+                'email_err' => '',
+                'password_err' => '',
+                'mobile_err' => '',
+                'web_err' => '',
+                'status_err' => '',
+                'college_err' => '',
+                'detail_err' => ''
+            ];
+            if (empty($data["id"])) {
+                $data["id_err"] = "Stream name is required";
+            }
+            if (empty($data["name"])) {
+                $data["name_err"] = "Name is required";
+            }
+            if (empty($data["email"])) {
+                $data["email_err"] = "email is required";
+            }
+            if ($this->adminModel->$data['email']) {
+                $data["email_err"] = "email is alreday registred";
+            }
+
+            if (empty($data["mobile"])) {
+                $data["mobile_err"] = "mobile no is required";
+            }
+
+            if (empty($data["status"])) {
+                $data["status_err"] = "Status is required";
+            }
+            if (empty($data["college"])) {
+                $data["college_err"] = "college_name is required";
+            }
+            if (empty($data["detail"])) {
+                $data["detail_err"] = "Details is required";
+            }
+            // Make sure errors are empty
+            if (
+                empty($data['email_err']) && empty($data['name_err'])  && empty($data['id_err']) &&
+                empty($data['status_err']) && empty($data['mobile_err']) && empty($data['college_err'])
+            ) {
+
+                if ($this->adminModel->updateEditor($data)) {
+                    flash('register_success', 'You are registered and can log in');
+                    redirect('admins/viewEditor');
+                } else {
+                    die('Something went wrong');
+                }
+            } else
+                $this->view('admins/updateEditor', $data);
+        } else {
+            $data = [
+                'journalId' => $journalsId,
+                'title' => 'test Us',
+                'stream' => $allStream,
+                'editor' => $assocaie,
+                'name' => '',
+                'email' => '',
+                'password' => '',
+                'mobile' => '',
+                'web' => '',
+                'role' => '',
+                'status' => '',
+                'college' => '',
+                'detail' => '',
+                'sid' => '',
+
+                'stream_err' => '',
+                'name_err' => '',
+                'email_err' => '',
+                'password_err' => '',
+                'mobile_err' => '',
+                'role_err' => '',
+                'web_err' => '',
+                'status_err' => '',
+                'college_err' => '',
+                'detail_err' => ''
+            ];
+
+            $this->view('admins/updateEditor', $data);
+        }
+    }
     public function reviewerDetail()
     {
         $rid = $_GET['rid'];
@@ -35,10 +227,140 @@ class Admins extends Controller
         ];
         $this->view('admins/addReviewer', $data);
     }
+
+    public function updateReviewere()
+    {
+        $id = $_GET['ID'];
+        $assocaie = $this->adminModel->editEditor($id);
+        $journalsId = $this->loginModel->getJournals();
+        $allStream = $this->loginModel->stream();
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Sanitize POST array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'journalId' => $journalsId,
+                'title' => 'test Us',
+                'stream' => $allStream,
+                'name' => rim($_POST['name']),
+                'email' => rim($_POST['email']),
+                'mobile' => rim($_POST['mobile']),
+                'web' => rim($_POST['weblink']),
+                'status' => rim($_POST['status']),
+                'college' => rim($_POST['college_name']),
+                'detail' => rim($_POST['Detail']),
+                'id' => $id,
+                'sid' => trim($_POST['sid']),
+                'stream_err' => '',
+                'name_err' => '',
+                'email_err' => '',
+                'password_err' => '',
+                'mobile_err' => '',
+                'web_err' => '',
+                'status_err' => '',
+                'college_err' => '',
+                'detail_err' => ''
+            ];
+            if (empty($data["id"])) {
+                $data["id_err"] = "Stream name is required";
+            }
+            if (empty($data["name"])) {
+                $data["name_err"] = "Name is required";
+            }
+            if (empty($data["email"])) {
+                $data["email_err"] = "email is required";
+            }
+            if ($this->adminModel->$data['email']) {
+                $data["email_err"] = "email is alreday registred";
+            }
+
+            if (empty($data["mobile"])) {
+                $data["mobile_err"] = "mobile no is required";
+            }
+
+            if (empty($data["status"])) {
+                $data["status_err"] = "Status is required";
+            }
+            if (empty($data["college"])) {
+                $data["college_err"] = "college_name is required";
+            }
+            if (empty($data["detail"])) {
+                $data["detail_err"] = "Details is required";
+            }
+            // Make sure errors are empty
+            if (
+                empty($data['email_err']) && empty($data['name_err'])  && empty($data['id_err']) &&
+                empty($data['status_err']) && empty($data['mobile_err']) && empty($data['college_err'])
+            ) {
+
+                if ($this->adminModel->updateReviewer($data)) {
+                    flash('register_success', 'You are registered and can log in');
+                    redirect('admins/viewReviewer');
+                } else {
+                    die('Something went wrong');
+                }
+            } else
+                $this->view('admins/updateReviewere', $data);
+        } else {
+            $data = [
+                'journalId' => $journalsId,
+                'title' => 'test Us',
+                'stream' => $allStream,
+                'editor' => $assocaie,
+                'name' => '',
+                'email' => '',
+                'password' => '',
+                'mobile' => '',
+                'web' => '',
+                'role' => '',
+                'status' => '',
+                'college' => '',
+                'detail' => '',
+                'sid' => '',
+
+                'stream_err' => '',
+                'name_err' => '',
+                'email_err' => '',
+                'password_err' => '',
+                'mobile_err' => '',
+                'role_err' => '',
+                'web_err' => '',
+                'status_err' => '',
+                'college_err' => '',
+                'detail_err' => ''
+            ];
+
+            $this->view('admins/updateReviewere', $data);
+        }
+    }
     public function viewReviewer()
     {
 
         $reviwer = $this->editorModel->getReviwer();
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Sanitize POST array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'view' =>  $reviwer,
+                'bid' => rim($_POST['bid']),
+            ];
+            if (empty($data['bid'])) {
+                $data['bid_err'] = "journal name is required";
+            }
+            if (empty($data['bid_err'])) {
+                if ($this->editorModel->deleteReviewer($data)) {
+                    flash('delete_success', 'You are Delete the data');
+                    redirect('admins/viewReviewer');
+                } else {
+                    die('Something went wrong');
+                }
+            } else
+                $this->view('admins/viewReviewer', $data);
+        } else {
+            $data = [
+                'view' =>  $reviwer
+            ];
+            $this->view('admins/viewReviewer', $data);
+        }
         $data = [
             'view' =>  $reviwer
         ];
@@ -206,10 +528,33 @@ class Admins extends Controller
     {
         $journal = $this->editorModel->getJournalByStream();
         $assocaie = $this->editorModel->getAsEditor();
-        $data = [
-            'associate' => $assocaie,
-            'journal' => $journal
-        ];
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Sanitize POST array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'associate' => $assocaie,
+                'journal' => $journal,
+                'bid' => rim($_POST['bid']),
+            ];
+            if (empty($data['bid'])) {
+                $data['bid_err'] = "Editor name is required";
+            }
+            if (empty($data['bid_err'])) {
+                if ($this->editorModel->deleteAssociate($data)) {
+                    flash('delete_success', 'You are Delete the data');
+                    redirect('admins/viewAssociate');
+                } else {
+                    die('Something went wrong');
+                }
+            } else
+                $this->view('admins/viewAssociate', $data);
+        } else {
+            $data = [
+                'associate' => $assocaie,
+                'journal' => $journal
+            ];
+            $this->view('admins/viewAssociate', $data);
+        }
 
         $this->view('admins/viewAssociate', $data);
     }
@@ -217,14 +562,37 @@ class Admins extends Controller
     {
         $journal = $this->loginModel->getJournals();
         $assocaie = $this->adminModel->getEditor();
-        $data = [
-            'associate' => $assocaie,
-            'journal' => $journal
-        ];
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Sanitize POST array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'associate' => $assocaie,
+                'journal' => $journal,
+                'bid' => rim($_POST['bid']),
+            ];
+            if (empty($data['bid'])) {
+                $data['bid_err'] = "Editor name is required";
+            }
+            if (empty($data['bid_err'])) {
+                if ($this->adminModel->deleteEditor($data)) {
+                    flash('delete_success', 'You are Delete the data');
+                    redirect('admins/viewEditor');
+                } else {
+                    die('Something went wrong');
+                }
+            } else
+                $this->view('admins/viewEditor', $data);
+        } else {
+            $data = [
+                'associate' => $assocaie,
+                'journal' => $journal
+            ];
+            $this->view('admins/viewEditor', $data);
+        }
 
         $this->view('admins/viewEditor', $data);
     }
-    public function  addIssueDate()
+    public function addIssueDate()
     {
         $journal = $this->editorModel->getJournalByStream();
 
@@ -371,10 +739,20 @@ class Admins extends Controller
     public function viewIssue()
     {
         $issue = $this->editorModel->issue();
-        $data = [
-            'issue' => $issue
-        ];
-        $this->view('admins/viewIssue', $data);
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = $_POST['as'];
+            if ($this->editorModel->deleteIssue($id)) {
+                flash('post_message', 'Post Removed');
+                redirect('admins/viewIssue&er=y');
+            } else {
+                die('Something went wrong');
+            }
+        } else {
+            $data = [
+                'issue' => $issue
+            ];
+            $this->view('admins/viewIssue', $data);
+        }
     }
     public function addJournal()
     {
@@ -459,14 +837,222 @@ class Admins extends Controller
             $this->view('admins/addJournal', $data);
         }
     }
+
+    public function updateAssociate()
+    {
+        $id = $_GET['ID'];
+        $stream = $this->editorModel->getStream();
+        $journal = $this->editorModel->getJournalByStream();
+        $assocaie = $this->editorModel->getAsEditorByID($id);
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $data = [
+                'stream' => $stream,
+                'associate' => $assocaie,
+                'journal' => $journal,
+                'bid' => $id,
+                'sid' => rim($_POST["sid"]),
+                'name' => rim($_POST["name"]),
+                'email' => rim($_POST["email"]),
+                'confirm_password' => rim($_POST["confirm_password"]),
+                'mobile' => rim($_POST["mobile"]),
+                'status' => rim($_POST["status"]),
+                'college' => rim($_POST["college_name"]),
+                'detail' => rim($_POST["Detail"]),
+                'web' => rim($_POST['weblink']),
+                'sid_err' => '',
+                'name_err' => '',
+                'email_err' => '',
+                'confirm_password_err' => '',
+                'mobile_err' => '',
+                'role_err' => '',
+                'status_err' => '',
+                'college_err' => '',
+                'web_err' => '',
+                'password_err' => '',
+                'detail_err' => ''
+            ];
+            // Validate Password
+            // if (empty($data['password'])) {
+            //     $data['password_err'] = 'Pleae enter password';
+            // } elseif (strlen($data['password']) < 6) {
+            //     $data['password_err'] = 'Password must be at least 6 characters';
+            // }
+            // if (empty($data["pwd1"])) {
+            //     $data['pwd1_err'] = "email is required";
+            // }
+            // // Validate Confirm Password
+            // if (empty($data['confirm_password'])) {
+            //     $data['confirm_password_err'] = 'Pleae confirm password';
+            // } else {
+            //     if ($data['password'] != $data['confirm_password']) {
+            //         $data['confirm_password_err'] = 'Passwords do not match';
+            //     }
+            // }
+            if (empty($data['web'])) {
+                $data['web_err'] = "link is required";
+            }
+
+            if (empty($data["sid"])) {
+                $data['sid_err'] = "Stream Name is required";
+            }
+            if (empty($data["name"])) {
+                $data['name_err'] = "Name is required";
+            }
+            if (empty($data["email"])) {
+                $data['email_err'] = "email is required";
+            }
+
+            if (empty($data["mobile"])) {
+                $data['mobile_err'] = "mobile no is required";
+            }
+            // if (empty($data["role"])) {
+            //     $data['role_err'] = "Role is required";
+            // }
+            if (empty($data["status"])) {
+                $data['status_err'] = "Status is required";
+            }
+            if (empty($data['college'])) {
+                $data['college_err'] = "college_name is required";
+            }
+            if (empty($data["detail"])) {
+                $data['detail_err'] = "Details is required";
+            }
+            if (
+                empty($data['sid_err']) && empty($data['name_err']) &&
+                empty($data['email_err'])  && empty($data['mobile_err'])  &&
+                empty($data['status_err']) && empty($data['college_err']) && empty($data['detail_err'])
+            ) {  // Hash Password
+
+                if ($this->editorModel->updateAssoc($data)) {
+                    flash('register_success', 'You are registered and can log in');
+                    redirect('admins/viewAssociate');
+                } else {
+                    die('Something went wrong');
+                }
+            } else {
+                $this->view('admins/updateAssociate', $data);
+            }
+        } else {
+            $data = [
+                'stream' => $stream,
+                'associate' => $assocaie,
+                'journal' => $journal,
+                'sid' => '',
+                'name' => '',
+                'email' => '',
+                'confirm_password' => '',
+                'mobile' => '',
+                'role' => '',
+                'status' => '',
+                'college' => '',
+                'detail' => '',
+                'web' => '',
+                'password' => '',
+                'sid_err' => '',
+                'name_err' => '',
+                'email_err' => '',
+                'confirm_password_err' => '',
+                'mobile_err' => '',
+                'role_err' => '',
+                'status_err' => '',
+                'college_err' => '',
+                'detail_err' => '',
+                'web_err' => '',
+                'password_err' => ''
+            ];
+
+            $this->view('admins/updateAssociate', $data);
+        }
+        $this->view('admins/updateAssociate', $data);
+    }
+    public function editIssue()
+    {
+        $id = $_GET['ID'];
+        $results = $this->editorModel->editIssues($id);
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Sanitize POST array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'id' => $id,
+                'issue' => $results,
+                'month' => rim($_POST["issue_month"]),
+                'volume' => rim($_POST["volume_no"]),
+                'special' => rim($_POST["is_special_issue"]),
+                'year' => rim($_POST["issue_year"]),
+                'specialName' => rim($_POST["special_issue_name"]),
+                'month_err' => '',
+                'volume_err' => '',
+                'year_err' => ''
+            ];
+            if (empty($data['month'])) {
+                $data['month_err'] = 'issue month is empty';
+            }
+            if (empty($data['volume'])) {
+                $data['volume_err'] = 'Volume is empty';
+            }
+            if (empty($data['year'])) {
+                $data['year_err'] = 'issue year is empty';
+            }
+            if (empty($data['month_err']) && empty($data['volume_err']) && empty($data['year_err'])) {
+                if ($this->editorModel->updateIssues($data)) {
+                    redirect('admins/viewIssue');
+                } else {
+                    die('domthing went wrong!!!!');
+                }
+            } else {
+                //load error
+                $this->view('admins/editIssue', $data);
+            }
+        } else {
+            $data = [
+                'issue' => $results,
+                'month' => '',
+                'volume' => '',
+                'special' => '',
+                'year' => '',
+                'specialName' => '',
+
+                'month_err' => '',
+                'volume_err' => '',
+                'year_err' => '',
+
+            ];
+        }
+        $this->view('admins/editIssue', $data);
+    }
     public function viewJournal()
     {
         $journal = $this->editorModel->getJournalByStream();
-        $data = [
-            'journal' => $journal,
-            'header-title' => 'Channel for touching the hights of the sky.',
-            'title' => 'Welcome to Vidya Publications'
-        ];
+        $stream = $this->loginModel->stream();
+        $journal = $this->editorModel->getJournalByStream();
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Sanitize POST array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'stream' => $stream,
+                'journal' => $journal,
+                'bid' => rim($_POST['bid']),
+            ];
+            if (empty($data['bid'])) {
+                $data['bid_err'] = "journal name is required";
+            }
+            if (empty($data['bid_err'])) {
+                if ($this->editorModel->deleteJournal($data)) {
+                    flash('delete_success', 'You are Delete the data');
+                    redirect('admins/viewJournal');
+                } else {
+                    die('Something went wrong');
+                }
+            } else
+                $this->view('admins/viewJournal', $data);
+        } else {
+            $data = [
+                'stream' => $stream,
+                'journal' => $journal,
+            ];
+            $this->view('admins/viewJournal', $data);
+        }
         $this->view('admins/viewJournal', $data);
     }
     public function register()
@@ -595,6 +1181,7 @@ class Admins extends Controller
                 'college_err' => '',
                 'detail_err' => ''
             ];
+
 
             $this->view('admins/addEditors', $data);
         }

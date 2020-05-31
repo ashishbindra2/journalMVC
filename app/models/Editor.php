@@ -22,7 +22,31 @@ class Editor
         $results = $this->db->resultSet();
         return $results;
     }
-
+    //Get Associate Editor
+    public function getAsEditorByID($id)
+    {
+        $this->db->query(" SELECT editors.STREAM_ID AS esid,
+        stream.STREAM_ID AS jsid,
+        editors.EIC_ID AS eid,
+        editors.NAME AS editorName,
+        editors.EMAIL AS editorEmail,
+        editors.MOBILE AS editorMobile,
+        editors.WEBLINK AS editorWeb,
+        editors.DETAIL AS editorDetail,
+        editors.College_name AS editorCollege,
+        editors.STATUS AS editorStatus,
+        stream.STREAM_NAME AS sName  FROM  
+        editors
+        JOIN
+        stream  On editors.STREAM_ID = stream.STREAM_ID
+        WHERE (ROLE ='Associate-Editor' 
+             OR editors.ROLE ='Associate Director'
+             OR editors.ROLE ='Associate Editor')
+             AND (stream.STATUS=1) AND editors.EIC_ID=:eid");
+        $this->db->bind(':eid', $id);
+        $results = $this->db->single();
+        return $results;
+    }
     public function getReviweDetial($rid)
     {
         $this->db->query("SELECT 
@@ -165,6 +189,7 @@ class Editor
     {
         $this->db->query(" SELECT editors.STREAM_ID AS esid,
         stream.STREAM_ID AS jsid,
+        editors.EIC_ID AS eid,
         editors.NAME AS editorName,
         editors.EMAIL AS editorEmail,
         editors.MOBILE AS editorMobile,
@@ -207,7 +232,7 @@ class Editor
     //Journals Fields
     public function getJournals()
     {
-        $this->db->query('SELECT * FROM journal_names');
+        $this->db->query('SELECT * FROM journal_names ');
         $results = $this->db->resultSet();
         return $results;
     }
@@ -237,8 +262,7 @@ class Editor
         $this->db->query("SELECT J_ISSUES_ID,JOURNAL_NAME,ISSUE_MONTH,
         VOLUME_NO,IS_SPECIAL_ISSUE,ISSUE_YEAR,D_O_UPLOADING, SPECIAL_ISSUE_NAME 
         FROM journal_names,j_issues 
-        WHERE journal_names.JOURNAL_ID=j_issues.JOURNAL_ID  ORDER BY J_ISSUES_ID DESC;
-");
+        WHERE journal_names.JOURNAL_ID=j_issues.JOURNAL_ID  ORDER BY J_ISSUES_ID DESC");
         $results = $this->db->resultSet();
         return $results;
     }
@@ -262,6 +286,128 @@ class Editor
             return false;
         }
     }
+    public function updateJournal($data)
+    {
+        $this->db->query("UPDATE journal_names  SET JOURNAL_NAME = :jName,
+         JOURNAL_N_ABB = :jAbb, J_ISSN_E = :jE, J_ISSN_P = :jP, FREQUENCY = :frequency, STATUS = :status,STREAM_ID = :sid
+         WHERE JOURNAL_ID = :jid");
+        $this->db->bind(':jid', $data['id']);
+        $this->db->bind(':jName', $data['name']);
+        $this->db->bind(':jAbb', $data['jAbb']);
+        $this->db->bind(':jE', $data['jE']);
+        $this->db->bind(':jP', $data['jP']);
+        $this->db->bind(':frequency', $data['frequency']);
+        $this->db->bind(':status', $data['status']);
+        $this->db->bind(':sid', $data['sid']);
+
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function updateAssoc($data)
+    {
+        $this->db->query("UPDATE editors 
+        SET STREAM_ID = :stream, NAME = :Name, EMAIL = :email, MOBILE = :mobile,
+          WEBLINK = :web,ROLE = :role, College_name = :college,STATUS = :status, DETAIL = :detail
+         WHERE EIC_ID = :eid");
+        $this->db->bind(':eid', $data['bid']);
+        $this->db->bind(':Name', $data['name']);
+        $this->db->bind(':email', $data['email']);
+        $this->db->bind(':mobile', $data['mobile']);
+        $this->db->bind(':web', $data['web']);
+        $this->db->bind(':detail', $data['detail']);
+        $this->db->bind(':college', $data['college']);
+        $this->db->bind(':status', $data['status']);
+        $this->db->bind(':stream', $data['sid']);
+        $this->db->bind(':role', 'Associate Editor');
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function deleteAssociate($data)
+    {
+        $this->db->query("DELETE  FROM editors WHERE EIC_ID = :jid");
+        $this->db->bind(':jid', $data['bid']);
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function deleteJournal($data)
+    {
+        $this->db->query("DELETE  FROM journal_names WHERE JOURNAL_ID = :jid");
+        $this->db->bind(':jid', $data['bid']);
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function deleteReviewer($data)
+    {
+        $this->db->query('DELETE FROM reviewer WHERE REVIEWER_ID = :id');
+        //Bind data
+        $this->db->bind(':id', $data['bid']);
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function deleteIssue($id)
+    {
+        $this->db->query('DELETE FROM j_issues WHERE J_ISSUES_ID = :id');
+        //Bind data
+        $this->db->bind(':id', $id);
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function updateIssues($data)
+    {
+        $this->db->query("UPDATE j_issues 
+        SET  ISSUE_MONTH=:months, 
+        VOLUME_NO=:vol, IS_SPECIAL_ISSUE=:isIssue,
+        D_O_UPLOADING=Now(), ISSUE_YEAR=:years,
+        SPECIAL_ISSUE_NAME=:sins 
+        WHERE J_ISSUES_ID=:id");
+        //bind the data
+        $this->db->bind(':id', $data['id']);
+        $this->db->bind(':months', $data['month']);
+        $this->db->bind(':vol', $data['volume']);
+        $this->db->bind(':isIssue', $data['special']);
+        $this->db->bind(':years', $data['year']);
+        $this->db->bind(':sins', $data['specialName']);
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function editIssues($id)
+    {
+        $this->db->query("SELECT * FROM j_issues WHERE J_ISSUES_ID=:JID");
+        //bind the data
+        $this->db->bind(':JID', $id);
+        //result
+        $row = $this->db->single();
+        return $row;
+    }
     //list of fields in associate editor
     public function getJournalByStream()
     {
@@ -269,16 +415,38 @@ class Editor
                journal_names.STREAM_ID AS jsid,
                stream.STREAM_NAME AS sName,
                journal_names.JOURNAL_NAME AS jName,
+               journal_names.JOURNAL_ID AS jid,
                journal_names.JOURNAL_N_ABB AS jAbb,
                journal_names.J_ISSN_E AS jO,
                journal_names.J_ISSN_P AS jP,
                journal_names.FREQUENCY AS jF
                FROM stream JOIN journal_names
-               ON stream.STREAM_ID = journal_names.STREAM_ID');
+               ON stream.STREAM_ID = journal_names.STREAM_ID ORDER BY journal_names.JOURNAL_ID DESC');
         $results = $this->db->resultSet();
         return $results;
     }
-    function streamSearch($sid)
+    //list of fields of journal by id
+    public function getJournalById($id)
+    {
+        $this->db->query('SELECT stream.STREAM_ID AS esid,
+               journal_names.STREAM_ID AS jsid,
+               stream.STREAM_NAME AS sName,
+               journal_names.JOURNAL_NAME AS jName,
+               journal_names.JOURNAL_ID AS jid,
+               journal_names.JOURNAL_N_ABB AS jAbb,
+               journal_names.J_ISSN_E AS jO,
+               journal_names.J_ISSN_P AS jP,
+               journal_names.FREQUENCY AS jF,
+               journal_names.STATUS AS sta
+               FROM stream 
+               JOIN journal_names
+               ON stream.STREAM_ID = journal_names.STREAM_ID
+               WHERE journal_names.JOURNAL_ID = :id');
+        $this->db->bind(':id', $id);
+        $results = $this->db->single();
+        return $results;
+    }
+    public function streamSearch($sid)
     {
         $this->db->query("SELECT *  FROM stream WHERE STREAM_ID=:sid");
         $this->db->bind(':sid', $sid);

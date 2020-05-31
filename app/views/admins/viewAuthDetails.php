@@ -3,8 +3,8 @@
     <div class="container-fluid">
         <h1 class="mt-4">Author Details</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="#">view author</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo URLROOT; ?>admins/home">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo URLROOT; ?>admins/viewAuthor">view author</a></li>
             <li class="breadcrumb-item active">Author Details</li>
         </ol>
 

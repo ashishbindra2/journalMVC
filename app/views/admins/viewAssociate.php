@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <h1 class="mt-4">Active Associates Editors</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo URLROOT; ?>admins/home">Dashboard</a></li>
             <li class="breadcrumb-item active">View Associates Editors</li>
         </ol>
 
@@ -42,11 +42,14 @@
                                         <td> <?php echo $ass->editorMobile; ?> </td>
                                         <td> <?php echo $ass->editorWeb; ?> </td>
                                         <td> <?php echo $ass->editorCollege; ?> </td>
-                                        <td>
-                                            <a href="update_editor.php?ID=<?php echo $c["EIC_ID"]; ?>">Edit</a>
-                                            <a href="delete_data.php?ID=<?php echo $c["EIC_ID"]; ?>&func=<?php echo 3; ?>">
-                                                <span class="glyphicon glyphicon-trash"></span></a>
-                                        </td>
+                                        <form method="post">
+                                            <td><a href="<?php echo URLROOT; ?>admins/updateAssociate&ID=<?php echo $ass->eid; ?>" style=" text-decoration:none;">Edit</a>
+                                                <input type="hidden" name="eid" id="eid" value="<?php echo $ass->eid; ?>">
+                                                <input type="hidden" name="bid" id='bid' value="<?php echo $ass->eid; ?>">
+                                                <button type="submit" value="delete" id="delete" style="border: none; text-decoration:none;background:transparent; color:red;"> Delete </button> <span class="glyphicon glyphicon-trash">
+                                                </span>
+                                            </td>
+                                        </form>
                                     </tr>
                             <?php endforeach;
                             } else
