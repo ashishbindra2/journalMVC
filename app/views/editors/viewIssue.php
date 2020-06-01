@@ -57,10 +57,15 @@
                                         <td> <?php echo $is->D_O_UPLOADING; ?> </td>
 
                                         <td> <?php echo $is->SPECIAL_ISSUE_NAME; ?> </td>
-                                        <td><a href="update_issue.php?ID=<?php echo $c["J_ISSUES_ID"]; ?>"><span class="glyphicon glyphicon-edit"></span></a></td>
-                                        <td><a href="delete_data.php?ID=<?php echo $c["J_ISSUES_ID"]; ?>&func=<?php echo 2; ?>">
-                                                <span class="glyphicon glyphicon-trash"></span></a>
-                                        </td>
+                                        <form method="post">
+                                            <td><a href="<?php echo URLROOT; ?>editors/editIssue&ID=<?php echo $is->J_ISSUES_ID ?>" style=" text-decoration:none;">
+                                                    <span class="glyphicon glyphicon-edit"></span></a>
+
+                                                <input type="hidden" name="as" id='bid' value="<?php echo $is->J_ISSUES_ID; ?>">
+                                                <button type="submit" value="delete" id="delete" style="border: none; text-decoration:none;background:transparent; color:red;"> <span class="glyphicon glyphicon-trash">
+                                                    </span></button>
+                                            </td>
+                                        </form>
                                     </tr>
                             <?php $i++;
                                 }

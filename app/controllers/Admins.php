@@ -361,9 +361,7 @@ class Admins extends Controller
             ];
             $this->view('admins/viewReviewer', $data);
         }
-        $data = [
-            'view' =>  $reviwer
-        ];
+
         $this->view('admins/viewReviewer', $data);
     }
     public function paperStatus()
@@ -388,10 +386,124 @@ class Admins extends Controller
     public function viewAuthor()
     {
         $author = $this->editorModel->getAuthor();
-        $data = [
-            'author' => $author
-        ];
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Sanitize POST array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+
+                'bid' => rim($_POST['bid']),
+                'author' => $author
+            ];
+            if (empty($data['bid'])) {
+                $data['bid_err'] = "journal name is required";
+            }
+            if (empty($data['bid_err'])) {
+                if ($this->editorModel->deleteAuth($data)) {
+                    flash('delete_success', 'You are Delete the data');
+                    redirect('admins/viewAuthor');
+                } else {
+                    die('Something went wrong');
+                }
+            } else
+                $this->view('admins/viewAuthor', $data);
+        } else {
+            $data = [
+                'author' => $author
+            ];
+            $this->view('admins/viewAuthor', $data);
+        }
+
+
         $this->view('admins/viewAuthor', $data);
+    }
+    public function updateAuthor()
+    {
+        $id = $_GET['ID'];
+        $stream = $this->loginModel->stream();
+        $journal = $this->editorModel->getJournalByStream();
+        $journalName = $this->editorModel->getJournalById($id);
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Sanitize POST array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'stream' => $stream,
+                'journal' => $journal,
+                'journa' => $journalName,
+                'id' => $id,
+                'name' => rim($_POST['journal_name']),
+                'jAbb' => rim($_POST['journal_n_abb']),
+                'status' => rim($_POST['status']),
+                'sid' => rim($_POST["Stream_id"]),
+                'jP' => rim($_POST['j_issn_p']),
+                'jE' => rim($_POST['j_issn_e']),
+                'frequency' => rim($_POST['frequency']),
+
+                'name_err' => '',
+                'jAbb_err' => '',
+                'status_err' => '',
+                'sid_err' => '',
+                'jP_err' => '',
+                'jE_err' => '',
+                'frequency_err' => ''
+
+            ];
+
+            if (empty($data['name'])) {
+                $data['name_err'] = "journal name is required";
+            }
+            if (empty($data['jAbb'])) {
+                $data['jAbb_err'] = "Abbervation is required";
+            }
+            if (empty($data['status'])) {
+                if ($data['status'] != '0')
+                    $data['status_err'] = "status is required";
+            }
+            if (empty($data['jP'])) {
+                $data['jP_err'] = "print is required";
+            }
+            if (empty($data['jE'])) {
+                $data['jE_err'] = "online is required";
+            }
+            if (empty($data['frequency'])) {
+                $data['frequency_err'] = "frequency is required";
+            }
+            if (empty($data['sid'])) {
+                $data['sid_err'] = "stream is required";
+            }
+            if (
+                empty($data['name_err']) && empty($data['jAbb_err']) &&
+                empty($data['status_err']) && empty($data['sid_err']) &&
+                empty($_POST['jP_err']) && empty($_POST['jE_err']) &&
+                empty($_POST['frequency_err'])
+            ) {
+                if ($this->editorModel->updateJournal($data)) {
+                    flash('register_success', 'You are registered and can log in');
+                    redirect('admins/viewAuth');
+                } else {
+                    die('Something went wrong');
+                }
+            } else
+                $this->view('admins/updateAuthor', $data);
+        } else {
+            $data = [
+                'stream' => $stream,
+                'journal' => $journal,
+                'journa' => $journalName,
+                'name' =>  '',
+                'jAbb' => '',
+                'status' => '',
+                'sid' => '',
+                'frequency' => '',
+                'name_err' => '',
+                'jAbb_err' => '',
+                'status_err' => '',
+                'sid_err' => '',
+                'jP_err' => '',
+                'jE_err' => '',
+                'frequency' => ''
+            ];
+            $this->view('admins/updateAuthor', $data);
+        }
     }
     public function addAssociates()
     {

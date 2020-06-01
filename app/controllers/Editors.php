@@ -193,16 +193,154 @@ class Editors extends Controller
             $this->view('editors/addAssEditor', $data);
         }
     }
+    public function updateAssociate()
+    {
+        $id = $_GET['ID'];
+        $stream = $this->editorModel->getStream();
+        $journal = $this->editorModel->getJournalByStream();
+        $assocaie = $this->editorModel->getAsEditorByID($id);
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $data = [
+                'stream' => $stream,
+                'associate' => $assocaie,
+                'journal' => $journal,
+                'bid' => $id,
+                'sid' => rim($_POST["sid"]),
+                'name' => rim($_POST["name"]),
+                'email' => rim($_POST["email"]),
+                'confirm_password' => rim($_POST["confirm_password"]),
+                'mobile' => rim($_POST["mobile"]),
+                'status' => rim($_POST["status"]),
+                'college' => rim($_POST["college_name"]),
+                'detail' => rim($_POST["Detail"]),
+                'web' => rim($_POST['weblink']),
+                'sid_err' => '',
+                'name_err' => '',
+                'email_err' => '',
+                'confirm_password_err' => '',
+                'mobile_err' => '',
+                'role_err' => '',
+                'status_err' => '',
+                'college_err' => '',
+                'web_err' => '',
+                'password_err' => '',
+                'detail_err' => ''
+            ];
+            // Validate Password
+            // if (empty($data['password'])) {
+            //     $data['password_err'] = 'Pleae enter password';
+            // } elseif (strlen($data['password']) < 6) {
+            //     $data['password_err'] = 'Password must be at least 6 characters';
+            // }
+            // if (empty($data["pwd1"])) {
+            //     $data['pwd1_err'] = "email is required";
+            // }
+            // // Validate Confirm Password
+            // if (empty($data['confirm_password'])) {
+            //     $data['confirm_password_err'] = 'Pleae confirm password';
+            // } else {
+            //     if ($data['password'] != $data['confirm_password']) {
+            //         $data['confirm_password_err'] = 'Passwords do not match';
+            //     }
+            // }
+            if (empty($data['web'])) {
+                $data['web_err'] = "link is required";
+            }
+
+            if (empty($data["sid"])) {
+                $data['sid_err'] = "Stream Name is required";
+            }
+            if (empty($data["name"])) {
+                $data['name_err'] = "Name is required";
+            }
+            if (empty($data["email"])) {
+                $data['email_err'] = "email is required";
+            }
+
+            if (empty($data["mobile"])) {
+                $data['mobile_err'] = "mobile no is required";
+            }
+            // if (empty($data["role"])) {
+            //     $data['role_err'] = "Role is required";
+            // }
+            if (empty($data["status"])) {
+                $data['status_err'] = "Status is required";
+            }
+            if (empty($data['college'])) {
+                $data['college_err'] = "college_name is required";
+            }
+            if (empty($data["detail"])) {
+                $data['detail_err'] = "Details is required";
+            }
+            if (
+                empty($data['sid_err']) && empty($data['name_err']) &&
+                empty($data['email_err'])  && empty($data['mobile_err'])  &&
+                empty($data['status_err']) && empty($data['college_err']) && empty($data['detail_err'])
+            ) {  // Hash Password
+
+                if ($this->editorModel->updateAssoc($data)) {
+                    flash('register_success', 'You are registered and can log in');
+                    redirect('editors/addAssEditor');
+                } else {
+                    die('Something went wrong');
+                }
+            } else {
+                $this->view('editors/updateAssociate', $data);
+            }
+        } else {
+            $data = [
+                'stream' => $stream,
+                'associate' => $assocaie,
+                'journal' => $journal,
+                'sid' => '',
+                'name' => '',
+                'email' => '',
+                'confirm_password' => '',
+                'mobile' => '',
+                'role' => '',
+                'status' => '',
+                'college' => '',
+                'detail' => '',
+                'web' => '',
+                'password' => '',
+                'sid_err' => '',
+                'name_err' => '',
+                'email_err' => '',
+                'confirm_password_err' => '',
+                'mobile_err' => '',
+                'role_err' => '',
+                'status_err' => '',
+                'college_err' => '',
+                'detail_err' => '',
+                'web_err' => '',
+                'password_err' => ''
+            ];
+
+            $this->view('editors/updateAssociate', $data);
+        }
+        $this->view('editors/updateAssociate', $data);
+    }
     public function viewAssEditor()
     {
         $journal = $this->editorModel->getJournalByStream();
         $assocaie = $this->editorModel->getAsEditor();
-        $data = [
-            'associate' => $assocaie,
-            'journal' => $journal
-        ];
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = $_POST['as'];
+            if ($this->editorModel->deleteAssociate($id)) {
+                flash('post_message', 'Post Removed');
+                redirect('editors/viewAssEditor&er=y');
+            } else {
+                die('Something went wrong');
+            }
+        } else {
+            $data = [
+                'associate' => $assocaie,
+                'journal' => $journal
+            ];
 
-        $this->view('editors/viewAssEditor', $data);
+            $this->view('editors/viewAssEditor', $data);
+        }
     }
     public function  addIssueDate()
     {
@@ -351,10 +489,76 @@ class Editors extends Controller
     public function viewIssue()
     {
         $issue = $this->editorModel->issue();
-        $data = [
-            'issue' => $issue
-        ];
-        $this->view('editors/viewIssue', $data);
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = $_POST['as'];
+            if ($this->editorModel->deleteIssue($id)) {
+                flash('post_message', 'Post Removed');
+                redirect('editors/viewIssue&er=y');
+            } else {
+                die('Something went wrong');
+            }
+        } else {
+            $data = [
+                'issue' => $issue
+            ];
+
+            $this->view('editors/viewIssue', $data);
+        }
+    }
+    public function editIssue()
+    {
+        $id = $_GET['ID'];
+        $results = $this->editorModel->editIssues($id);
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Sanitize POST array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'id' => $id,
+                'issue' => $results,
+                'month' => rim($_POST["issue_month"]),
+                'volume' => rim($_POST["volume_no"]),
+                'special' => rim($_POST["is_special_issue"]),
+                'year' => rim($_POST["issue_year"]),
+                'specialName' => rim($_POST["special_issue_name"]),
+                'month_err' => '',
+                'volume_err' => '',
+                'year_err' => ''
+            ];
+            if (empty($data['month'])) {
+                $data['month_err'] = 'issue month is empty';
+            }
+            if (empty($data['volume'])) {
+                $data['volume_err'] = 'Volume is empty';
+            }
+            if (empty($data['year'])) {
+                $data['year_err'] = 'issue year is empty';
+            }
+            if (empty($data['month_err']) && empty($data['volume_err']) && empty($data['year_err'])) {
+                if ($this->editorModel->updateIssues($data)) {
+                    redirect('editors/viewIssue');
+                } else {
+                    die('domthing went wrong!!!!');
+                }
+            } else {
+                //load error
+                $this->view('editors/editIssue', $data);
+            }
+        } else {
+            $data = [
+                'issue' => $results,
+                'month' => '',
+                'volume' => '',
+                'special' => '',
+                'year' => '',
+                'specialName' => '',
+
+                'month_err' => '',
+                'volume_err' => '',
+                'year_err' => '',
+
+            ];
+        }
+        $this->view('editors/editIssue', $data);
     }
     public function addJournal()
     {

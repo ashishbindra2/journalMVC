@@ -31,7 +31,7 @@
                                 <th>Institute City</th>
                                 <th>Institute State</th>
                                 <th>Institute Country</th>
-                                <th>Operation</th>
+                                <th colspan="2">Operation</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,10 +52,13 @@
                                         <td> <?php echo $author->CITY; ?> </td>
                                         <td> <?php echo $author->STATE; ?> </td>
                                         <td> <?php echo $author->COUNTRY; ?> </td>
-                                        <td><a href="update_author.php?ID=<?php echo $c["AUTH_ID"]; ?>">Edit</a></td>
-                                        <td><a href="delete_data.php?ID=<?php echo $c["AUTH_ID"]; ?>&func=<?php echo 4; ?>">
-                                                <span class="glyphicon glyphicon-trash"></span></a>
-                                        </td>
+                                        <form method="post">
+                                            <td><a href="<?php echo URLROOT; ?>admins/updateAuthor&ID=<?php echo $author->AUTH_ID ?>" style=" text-decoration:none;">Edit</a>
+                                            </td> <input type="hidden" name="bid" id='bid' value="<?php echo $author->AUTH_ID; ?>">
+                                            <td> <button type="submit" value="delete" id="delete" style="border: none; text-decoration:none;background:transparent; color:red;"> Delete </button> <span class="glyphicon glyphicon-trash">
+                                                </span>
+                                            </td>
+                                        </form>
                                     </tr>
                             <?php    }
                             } else

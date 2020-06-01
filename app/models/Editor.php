@@ -365,6 +365,18 @@ class Editor
             return false;
         }
     }
+    public function deleteAuth($data)
+    {
+        $this->db->query('DELETE FROM author_details WHERE AUTH_ID = :id');
+        //Bind data
+        $this->db->bind(':id', $data['bid']);
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function deleteIssue($id)
     {
         $this->db->query('DELETE FROM j_issues WHERE J_ISSUES_ID = :id');
