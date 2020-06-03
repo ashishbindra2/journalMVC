@@ -68,6 +68,18 @@ class Associate
             return false;
         }
     }
+
+    public function getPaperData($rid)
+    {
+        $this->db->query("SELECT paper_submission_detail.PAPER_SUB_ID AS PID,
+        paper_submission_detail.TITLE AS TITLES
+         FROM assignment 
+        JOIN  paper_submission_detail ON assignment.PAPER_SUB_ID =  paper_submission_detail.PAPER_SUB_ID
+        WHERE assignment.REVIEWER_ID =:rid");
+        $this->db->bind(':rid', $rid);
+        $results = $this->db->resultSet();
+        return $results;
+    }
     // get steams
     public function getStream()
     {
@@ -80,7 +92,7 @@ class Associate
         $this->db->query("INSERT INTO reviewer_revimder_details(PAPER_REVIEW_DETAIL_ID ,
         REMIDER_NUMBER , REMINDER_DATE , NOTIC ) 
         VALUES (:pid,:rid,:date,:notic)");
-        $this->db->bind(':pid', $data['file']);
+        $this->db->bind(':pid', $data['pid']);
         $this->db->bind(':rid', $data['rid']);
         $this->db->bind(':date', $data['date']);
         $this->db->bind(':notic', $data['notic']);

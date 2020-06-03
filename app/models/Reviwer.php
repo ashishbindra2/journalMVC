@@ -60,14 +60,14 @@ class Reviwer
         FROM 
         reviewer_revimder_details
         JOIN 
-        paper_reviewer_record ON paper_reviewer_record.P_REVIEWER_DETAILS_ID = reviewer_revimder_details.PAPER_REVIEW_DETAIL_ID
+        assignment ON assignment.REVIEWER_ID = reviewer_revimder_details.PAPER_REVIEW_DETAIL_ID
         JOIN 
-        paper_submission_detail ON paper_submission_detail.PAPER_SUB_ID = paper_reviewer_record.PAPER_SUB_ID
+        paper_submission_detail ON paper_submission_detail.PAPER_SUB_ID = assignment.PAPER_SUB_ID
         JOIN
-        j_issues ON   j_issues.J_ISSUES_ID=paper_reviewer_record.EIC_ID
+        j_issues ON   j_issues.J_ISSUES_ID=assignment.ISSUE_ID
         JOIN
         stream   ON stream.STREAM_ID =paper_submission_detail.STREAM_ID
-        WHERE paper_reviewer_record.REVIEWER_ID = :rid
+        WHERE assignment.REVIEWER_ID = :rid
         ');
         //bind the data
         $this->db->bind('rid', $rid);
@@ -100,7 +100,7 @@ class Reviwer
                             JOIN journal_names ON journal_names.JOURNAL_ID=assignment.JOURNAL_ID
                             -- JOIN author_details ON author_details.AUTH_ID=assignment.AUTH_ID
                             JOIN stream ON stream.STREAM_ID = paper_submission_detail.STREAM_ID
-                            WHERE REVIEWER_ID=:rid");
+                            WHERE assignment.REVIEWER_ID=:rid");
         $this->db->bind(':rid', $rid);
         $results = $this->db->resultSet();
         return $results;
@@ -137,7 +137,7 @@ class Reviwer
         FROM assignment
         JOIN paper_submission_detail ON paper_submission_detail.PAPER_SUB_ID = assignment.PAPER_SUB_ID
         JOIN paper_status_after_review ON paper_status_after_review.PAPER_SUB_ID = paper_submission_detail.PAPER_SUB_ID
-        WHERE assignment.REVIEWER_ID =:rid ORDER BY paper_submission_detail.PAPER_SUB_ID DESC LIMIT 1");
+        WHERE assignment.REVIEWER_ID =:rid ORDER BY paper_submission_detail.PAPER_SUB_ID DESC");
         // -- ;
         $this->db->bind(':rid', $rid);
         $results = $this->db->resultSet();

@@ -65,8 +65,6 @@
 
                         </tbody>
                     </table>
-                    <!-- /.table-responsive -->
-
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -74,9 +72,6 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <!-- /.row -->
-
-    <!-- /.row -->
 </div>
 <!-- /#page-wrapper -->
 <script>

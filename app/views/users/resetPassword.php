@@ -28,7 +28,7 @@
 				</div>
 
 				<div class="form-group">
-					<input type="submit" name="reset-password" id="reset-password" value="Reset Password" class="btn">
+					<input type="submit" name="reset-password" id="reset-password" value="Reset Password" class="btn btn-dark">
 				</div>
 			</div>
 		</form>

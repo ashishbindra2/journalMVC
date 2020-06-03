@@ -60,7 +60,7 @@
                                         <td><a href="<?php echo URLROOT; ?>admins/editIssue&ID=<?php echo $is->J_ISSUES_ID; ?>"><span class="glyphicon glyphicon-edit"></span>Edit</a></td>
                                         <form method="post">
                                             <input type="hidden" name="as" id="as" value="<?php echo $is->J_ISSUES_ID; ?>">
-                                            <td><button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span>>Delete</button> </td>
+                                            <td><button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span>Delete</button> </td>
                                         </form>
                                     </tr>
                             <?php $i++;

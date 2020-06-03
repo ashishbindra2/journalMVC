@@ -46,7 +46,7 @@
 
                         <td>
                           <?php
-                          switch ($n) {
+                          switch ($v) {
                             case 0:
                               echo '<span class="label label-warning">panding</span>';
                               break;

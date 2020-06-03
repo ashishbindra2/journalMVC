@@ -295,7 +295,10 @@ class Post
   }
   public function getDetail($aid)
   {
-    $this->db->query("SELECT * FROM  author_details  WHERE AUTH_ID=:aid");
+    $this->db->query("SELECT * FROM  author_details 
+    JOIN countries ON author_details.COUNTRY = countries.country_id
+    JOIN states ON author_details.STATE = states.state_id 
+    JOIN cities ON author_details.CITY = cities.city_id WHERE author_details.AUTH_ID=:aid");
     $this->db->bind(':aid', $aid);
     $row = $this->db->single();
     return $row;

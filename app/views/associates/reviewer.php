@@ -49,9 +49,9 @@
                                                     } elseif ($v == 2) {
                                                         echo "<span class='label label-danger'>Reject</span>";
                                                     } elseif ($v == 3) {
-                                                        echo '<span class="label label-success">Success Label</span>';
+                                                        echo '<span class="label label-success">Accept with minor update</span>';
                                                     } elseif ($v == 0) {
-                                                        echo '<span class="label label-warning">Warning Label</span>';
+                                                        echo '<span class="label label-warning">Reject with major update</span>';
                                                     } else {
                                                         echo " ";
                                                     }

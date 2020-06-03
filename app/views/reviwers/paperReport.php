@@ -1,5 +1,4 @@
-<?php include("includes/nav.php");
-$PID = $_GET['pid']; ?>
+<?php include("includes/nav.php"); ?>
 <div id="page-wrapper">
   <div class="row">
     <div class="col-lg-12">

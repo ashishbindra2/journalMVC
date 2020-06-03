@@ -308,7 +308,6 @@ class Associates extends Controller
     {
         $reviwer = $this->editorModel->getReviwer();
         $journal = $this->editorModel->getJournals();
-
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Sanitize POST array
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -316,31 +315,23 @@ class Associates extends Controller
             $data = [
                 'journal' => $journal,
                 'reviwer' => $reviwer,
-                'jid' => rim($_POST['jid']),
-                'volume' => rim($_POST['iid']),
+                'pid' => rim($_POST['pid']),
                 'rid' => rim($_POST['rid']),
-                'file' => rim($_POST['file']),
                 'date' => rim($_POST['date']),
                 'notic' => rim($_POST['notic']),
-                'jid_err' => '',
-                'volume_err' => '',
+                'pid_err' => '',
                 'rid_err' => '',
-                'file_err' => '',
                 'date_err' => '',
-                'notic_err'
+                'notic_err' => ''
             ];
-            if (empty($data["jid"])) {
-                $data["jid_err"] = "journal name is required";
-            }
-            if (empty($data["volume"])) {
-                $data["volume_err"] = "VOLUME NO is required";
+
+            if (empty($data["pid"])) {
+                $data["pid_err"] = "paper is required";
             }
             if (empty($data["rid"])) {
-                $data["rid_err"] = "Reviewwe is required";
+                $data["rid_err"] = "Reviewer is required";
             }
-            if (empty($data["file"])) {
-                $data["file_err"] = "File is required";
-            }
+
             if (empty($data["date"])) {
                 $data["date_err"] = "date is required";
             }
@@ -348,8 +339,7 @@ class Associates extends Controller
                 $data["notic_err"] = "Notic is required";
             }
             if (
-                empty($data["jid_err"])  && empty($data["file_err"]) &&
-                empty($data["rid_err"]) && empty($data["date_err"]) && empty($data["notic_err"])
+                empty($data["pid_err"])  &&  empty($data["rid_err"]) && empty($data["date_err"]) && empty($data["notic_err"])
             ) {
 
                 if ($this->associateModel->reminderDetail($data)) {
@@ -366,16 +356,14 @@ class Associates extends Controller
             $data = [
                 'journal' => $journal,
                 'reviwer' => $reviwer,
-                'jid' => '',
-                'volume' => '',
+                'pid' => '',
                 'rid' => '',
-                'file' => '',
                 'date' => '',
-                'jid_err' => '',
-                'volume_err' => '',
+                'notic' => '',
+                'pid_err' => '',
                 'rid_err' => '',
-                'file_err' => '',
-                'date_err' => ''
+                'date_err' => '',
+                'notic_err' => '',
             ];
             $this->view('associates/notic', $data);
         }
@@ -616,6 +604,17 @@ class Associates extends Controller
         $this->view('associates/ajaxData', $data);
     }
 
+    public function ajaxPaper()
+    {
+        $rid =  $_POST["REVIEWER_ID"];
+        $issue = $this->associateModel->getPaperData($rid);
+        print_r($issue);
+        $data = [
+            'issue' => $issue
+        ];
+
+        $this->view('associates/ajaxPaper', $data);
+    }
     public function  ajaxState()
     {
         $cid =  $_POST["country_id"];

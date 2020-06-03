@@ -41,15 +41,15 @@
               </tr>
               <tr>
                 <th scope="row"> City :</th>
-                <td><?php echo $data['posts']->CITY; ?></td>
+                <td><?php echo $data['posts']->city_name; ?></td>
               </tr>
               <tr>
                 <th scope="row"> State :</th>
-                <td><?php echo $data['posts']->STATE; ?></td>
+                <td><?php echo $data['posts']->state_name; ?></td>
               </tr>
               <tr>
                 <th scope="row"> Country :</th>
-                <td><?php echo $data['posts']->COUNTRY; ?></td>
+                <td><?php echo $data['posts']->country_name; ?></td>
               </tr>
 
             </table>
