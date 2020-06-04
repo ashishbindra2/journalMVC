@@ -17,7 +17,7 @@ class Users extends Controller
       if (sha1($user->AUTH_ID) == $token) {
         if ($this->userModel->activate($uid)) {
           echo "congratulation,your Account acticated. You can login now<br>";
-          redirect('users/signIn$id=' . $id);
+          redirect('users/signIn&id=' . $id);
         } else {
           echo "some problem occored. try after some time";
         }
@@ -28,7 +28,7 @@ class Users extends Controller
       echo "we cant find detail in our database";
     }
 
-    $this->view('users/verify$id=' . $id);
+    $this->view('users/verify&did=' . $id);
   }
   public function  ajaxState()
   {

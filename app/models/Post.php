@@ -175,8 +175,8 @@ class Post
      SET FNAME = :fname,  LNAME = :lname,
      A_TITLE = :title, GENDER = :gender,
      EMAIL = :email, MOBILE = :phone,
-     DESIGNATION = :designation, INSTITUTE_NAME = :institute,
-     CITY = :city, STATE = :stat, COUNTRY = :country 
+     DESIGNATION = :designation, INSTITUTE_NAME = :institute
+   
      WHERE AUTH_ID = :aid');
     // Bind values
     $this->db->bind(':aid', $data['aid']);
@@ -188,9 +188,9 @@ class Post
     $this->db->bind(':phone', $data['phone']);
     $this->db->bind(':designation', $data['designation']);
     $this->db->bind(':institute', $data['institute']);
-    $this->db->bind(':city', $data['city']);
-    $this->db->bind(':stat', $data['state']);
-    $this->db->bind(':country', $data['country']);
+    // $this->db->bind(':city', $data['city']);
+    // $this->db->bind(':stat', $data['state']);
+    // $this->db->bind(':country', $data['country']);
 
     // Execute
     if ($this->db->execute()) {

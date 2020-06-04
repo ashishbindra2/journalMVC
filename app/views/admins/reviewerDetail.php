@@ -58,7 +58,7 @@
                                             </td>
                                             <td> <?php echo $all->rAuthor; ?></td>
                                             <td> <?php echo $all->rAsEditor; ?> </td>
-                                            <td> <?php echo $all->dates; ?></td>
+                                            <td> <?php echo date("d/m/Y h:i:sa", strtotime($all->dates)); ?></td>
                                         </tr>
                                 <?php
                                     }

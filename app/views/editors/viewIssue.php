@@ -54,7 +54,7 @@
                                                 ?>
                                         </td>
                                         <td> <?php echo $is->ISSUE_YEAR; ?> </td>
-                                        <td> <?php echo $is->D_O_UPLOADING; ?> </td>
+                                        <td> <?php echo date("d/m/Y", strtotime($is->D_O_UPLOADING)); ?> </td>
 
                                         <td> <?php echo $is->SPECIAL_ISSUE_NAME; ?> </td>
                                         <form method="post">

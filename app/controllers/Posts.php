@@ -229,9 +229,9 @@ class Posts extends Controller
         'lname' => trim($_POST['lname']),
         'email' => trim($_POST['email']),
         'title' => trim($_POST['title']),
-        'city' => trim($_POST['city']),
-        'state' => trim($_POST['state']),
-        'country' => trim($_POST['country']),
+        // 'city' => trim($_POST['city']),
+        // 'state' => trim($_POST['state']),
+        // 'country' => trim($_POST['country']),
         'gender' => trim($_POST['gender']),
         'designation' => trim($_POST['designation']),
         'phone' => trim($_POST['phone']),
@@ -268,17 +268,17 @@ class Posts extends Controller
       }
 
       // Validate City
-      if (empty($data['city'])) {
-        $data['city_err'] = 'Pleae enter city name';
-      }
-      // Validate State Name
-      if (empty($data['state'])) {
-        $data['state_err'] = 'Pleae enter state name';
-      }
-      // Validate country
-      if (empty($data['country'])) {
-        $data['country_err'] = 'Pleae enter country';
-      }
+      // if (empty($data['city'])) {
+      //   $data['city_err'] = 'Pleae enter city name';
+      // }
+      // // Validate State Name
+      // if (empty($data['state'])) {
+      //   $data['state_err'] = 'Pleae enter state name';
+      // }
+      // // Validate country
+      // if (empty($data['country'])) {
+      //   $data['country_err'] = 'Pleae enter country';
+      // }
       // Validate Gender
       if (empty($data['gender'])) {
         $data['gender_err'] = 'Pleae enter gender';
@@ -302,8 +302,7 @@ class Posts extends Controller
       if (
         empty($data['email_err']) && empty($data['lname_err']) &&
         empty($data['lnmae_err']) && empty($data['title_err']) &&
-        empty($data['city_err']) && empty($data['state_err']) &&
-        empty($data['country_err']) && empty($data['gender_err']) &&
+        empty($data['gender_err']) &&
         empty($data['designation_err']) && empty($data['phone_err']) && empty($data['institute_err'])
       ) {
         // Validated
@@ -328,9 +327,9 @@ class Posts extends Controller
         'lname' => $posts->LNAME,
         'email' => $posts->EMAIL,
         'title' => $posts->A_TITLE,
-        'city' => $posts->CITY,
-        'state' => $posts->STATE,
-        'country' => $posts->COUNTRY,
+        // 'city' => $posts->CITY,
+        // 'state' => $posts->STATE,
+        // 'country' => $posts->COUNTRY,
         'gender' => $posts->GENDER,
         'designation' => $posts->DESIGNATION,
         'phone' => $posts->MOBILE,
@@ -550,6 +549,8 @@ class Posts extends Controller
     // $posts = $this->postModel->getPosts();
     $aid = $_SESSION['user_id'];
     $posts = $this->postModel->getDetail($aid);
+
+
     $data = [
       'journalId' => $journalsId,
       'posts' => $posts

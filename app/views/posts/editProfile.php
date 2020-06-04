@@ -34,7 +34,7 @@
           </div>
         </div>
 
-        <div class="form-row">
+        <!-- <div class="form-row">
           <div class="form-group col-md-6 mb-2">
             <label for="city"><strong>City</strong> </label>
             <input type="text" id="city" name="city" class="form-control <?php echo (!empty($data['city_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['city']; ?>">
@@ -50,7 +50,7 @@
             <input type="text" id="country" name="country" class="form-control  <?php echo (!empty($data['country_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['country']; ?>">
             <span class="invalid-feedback"><?php echo $data['country_err']; ?></span>
           </div>
-        </div>
+        </div> -->
         <div class="form-row">
           <legend class="col-form-label col-md-2 mb-2" for="input"><strong>Gender</strong> </legend>
 
